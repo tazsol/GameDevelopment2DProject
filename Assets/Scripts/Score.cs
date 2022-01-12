@@ -24,8 +24,10 @@ public static class Score {
             // New Highscore
             PlayerPrefs.SetInt("highscore", score);
             PlayerPrefs.Save();
+            Debug.Log("New high score");
             return true;
         } else {
+            Debug.Log("No new high score :(");
             return false;
         }
     }

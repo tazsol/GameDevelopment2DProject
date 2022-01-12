@@ -37,23 +37,32 @@ public class Bird : MonoBehaviour {
 
     private void Update() {
         switch (state) {
-        default:
-        case State.WaitingToStart:
-            if (TestInput()) {
-                // Start playing
-                state = State.Playing;
-                birdRigidbody2D.bodyType = RigidbodyType2D.Dynamic;
-                Jump();
-                if (OnStartedPlaying != null) OnStartedPlaying(this, EventArgs.Empty);
-            }
-            break;
-        case State.Playing:
-            if (TestInput()) {
-                Jump();
-            }
+            default:
+            case State.WaitingToStart:
+                if (TestInput()) {
+                    // Start playing
+                    state = State.Playing;
+                    birdRigidbody2D.bodyType = RigidbodyType2D.Dynamic;
+                    Jump();
+                    if (OnStartedPlaying != null) OnStartedPlaying(this, EventArgs.Empty);
+                }
+                break;
+            case State.Playing:
+                if (TestInput()) {
+                    Jump();
+                }
 
-            // Rotate bird as it jumps and falls
-            transform.eulerAngles = new Vector3(0, 0, birdRigidbody2D.velocity.y * .15f);
+                // Rotate bird as it jumps and falls
+                transform.eulerAngles = new Vector3(0, 0, birdRigidbody2D.velocity.y * .15f);
+
+                if (birdRigidbody2D.position.y > 50)
+                {
+                    birdRigidbody2D.bodyType = RigidbodyType2D.Static;
+                    //        SoundManager.PlaySound(SoundManager.Sound.Lose);
+                    SoundManager.PlaySound(SoundManager.Sound.AlternateLose);
+                    if (OnDied != null) OnDied(this, EventArgs.Empty);
+                    state = State.Dead;
+                }
             break;
         case State.Dead:
             break;
